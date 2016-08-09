@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Hello World</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #C6B69B;
+        position: relative;
+        overflow: hidden;
+      }
+
+      button {
+        height: 50px;
+        width: 100px;
+        position: absolute;
+        margin: -25px 0 0 -25px;
+        left: 50%;
+        top: 50%;
+      }
+    </style>
+    <script>
+      var cams = [];
+      var body = null;
+      var start = null;
+
+      function Cam(){
+        this.x = Math.random() > 0.5 ? 0 : 1.0;
+        this.y = Math.random();
+        this.speed = 0.0025 + (Math.random() * 0.005);
+        if (this.x == 1) {
+          this.speed = -1 * this.speed;
+        }
+        this.size = 50 + (Math.random() * 250);
+        this.el = document.createElement('IMG');
+        this.el.style.position = 'absolute';
+        this.el.src = './cam.png';
+        this.el.setAttribute('width', this.size);
+        if (Math.random() < 0.5) {
+          this.el.style.transform = 'scaleX(-1)';
+        }
+      }
+      Cam.prototype.animate = function() {
+        this.x = this.x + this.speed;
+
+        this.el.style.top = (this.y * (body.offsetHeight - this.el.offsetHeight)) + 'px';
+        this.el.style.left = this.x * body.offsetWidth + 'px';
+      }
+
+      function step(timestamp) {
+        cams.forEach(function(cam, index) {
+          cam.animate();
+          if (cam.x > 1 || cam.x < 0) {
+            body.removeChild(cam.el);
+            cams.splice(index, 1);
+          }
+        });
+            
+        window.requestAnimationFrame(step);
+      }
+
+      function addCam() {
+        if (body === null) {
+          body = document.getElementsByTagName('body')[0];
+        }
+        var cam = new Cam();
+        cams.push(cam);
+        body.appendChild(cam.el);
+        cam.animate();
+      }
+
+      window.requestAnimationFrame(step);
+    </script>
+  </head>
+  <body>
+    <button onclick="addCam()">MORE CAMS</button>
+  </body>
+</html>

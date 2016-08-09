@@ -96,13 +96,13 @@
       function alottaCams() {
         var error = document.getElementById("error");
         var number = document.getElementById("numbercam").value;
-        var i = 0, iters = number;
+        var i = 0;
         if (number > 0 && number <= 100) {
           error.innerHTML = "";
           function timedCam() {
             addCam();
             i++;
-            if (i < iters){
+            if (i < number){
               setTimeout(timedCam, 50);
             }
           }

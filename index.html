@@ -1,25 +1,47 @@
 <html>
   <head>
-    <title>Hello World</title>
+    <title>
+      cam generator
+    </title>
     <style>
+
       body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
         background-color: #C6B69B;
-        position: relative;
+        font-family: sans-serif;
+        font-size: 18px;
+        height: 100%;
+        margin: 0;
         overflow: hidden;
+        padding: 0;
+        position: relative;
+        width: 100%;
       }
 
-      button {
-        height: 50px;
-        width: 100px;
-        position: absolute;
-        margin: -25px 0 0 -25px;
-        left: 50%;
-        top: 50%;
+      .container {
+        align-items: flex-start;
+        display: flex;
+        justify-content: center;
+        z-index: 2;
       }
+
+      .container > * {
+        padding: 2em;
+        position: relative;
+        z-index: 2;
+      }
+
+      img {
+        pointer-events: none;
+      }
+
+      form input[type='submit'] {
+        display: block;
+      }
+
+      form input[type='number'] {
+        width: 50px;
+      }
+
     </style>
     <script>
       var cams = [];
@@ -71,10 +93,61 @@
         cam.animate();
       }
 
+      function alottaCams() {
+        var error = document.getElementById("error");
+        var number = document.getElementById("numbercam").value;
+        var i = 0;
+        if (number > 0 && number <= 100) {
+          error.innerHTML = "";
+          function timedCam() {
+            addCam();
+            i++;
+            if (i < number){
+              setTimeout(timedCam, 50);
+            }
+          }
+          timedCam();
+        } else if (number > 50) {
+          error.innerHTML = "way too many cams";
+        } else {
+          error.innerHTML = "you have to have a cam";
+        }
+      }
+
       window.requestAnimationFrame(step);
     </script>
   </head>
   <body>
-    <button onclick="addCam()">MORE CAMS</button>
+    <div class="container">
+      <div>
+        <p>
+          if you only want one cam
+        </p>
+        <input 
+          id="addcam" 
+          onclick="addCam()" 
+          tabindex="0" 
+          type="button" 
+          value="one cam pls" />
+      </div>
+      <form onsubmit="alottaCams()">
+        <p>
+          <label for="numbercam">
+            "actually i want 
+            <input 
+              id="numbercam" 
+              max="50"
+              placeholder="50"
+              type="number" /> 
+            cams"
+          </label>
+        </p>
+        <input 
+          href="#" 
+          type="submit" 
+          value="cam me" />
+        <p id="error"></p>
+      </form>
+    </div>
   </body>
 </html>

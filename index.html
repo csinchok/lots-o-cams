@@ -1,26 +1,47 @@
 <html>
   <head>
-    <title>Hello Cam</title>
+    <title>
+      cam generator
+    </title>
     <style>
+
       body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
         background-color: #C6B69B;
-        position: relative;
+        font-family: sans-serif;
+        font-size: 18px;
+        height: 100%;
+        margin: 0;
         overflow: hidden;
+        padding: 0;
+        position: relative;
+        width: 100%;
       }
 
-      button {
-        height: 50px;
-        width: 100px;
-        position: absolute;
-        margin: -25px 0 0 -25px;
-        left: 50%;
-        top: 50%;
+      .container {
+        align-items: flex-start;
+        display: flex;
+        justify-content: center;
         z-index: 2;
       }
+
+      .container > * {
+        padding: 2em;
+        position: relative;
+        z-index: 2;
+      }
+
+      img {
+        pointer-events: none;
+      }
+
+      form input[type='submit'] {
+        display: block;
+      }
+
+      form input[type='number'] {
+        width: 50px;
+      }
+
     </style>
     <script>
       var cams = [];
@@ -62,20 +83,42 @@
         window.requestAnimationFrame(step);
       }
 
-      function addCam() {
+      function addCams() {
+        var camCount = document.getElementById('camLevel').value;
         if (body === null) {
           body = document.getElementsByTagName('body')[0];
         }
-        var cam = new Cam();
-        cams.push(cam);
-        body.appendChild(cam.el);
-        cam.animate();
+        function timedCam() {
+          var cam = new Cam();
+          cams.push(cam);
+          body.appendChild(cam.el);
+          cam.animate();
+
+          camCount--;
+          if (camCount > 0){
+            setTimeout(timedCam, 50);
+          }
+        }
+        timedCam();
       }
 
       window.requestAnimationFrame(step);
     </script>
   </head>
   <body>
-    <button onclick="addCam()">MORE CAMS</button>
+    <div class="container">
+      <div>
+        <p>
+          how much?
+        </p>
+        <input type="range" id="camLevel" min="1" value="1" max="50" step="1">
+        <input 
+          id="addcam" 
+          onclick="addCams()" 
+          tabindex="0" 
+          type="button" 
+          value="cam me" />
+      </div>
+    </div>
   </body>
 </html>
